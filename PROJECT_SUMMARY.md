@@ -1,358 +1,308 @@
-AI Incident Intelligence
+# AIID Incident Intelligence
+### AI-Powered Incident Analysis, Risk Classification & Investigation Platform
 
-1. Project Overview
+---
 
-AI Incident Intelligence is a data analysis project that explores incidents involving artificial intelligence systems using data from the AI Incident Database (AIID).
+## 1. Project Overview
 
-The project focuses on understanding AI-related risks, identifying trends in reported incidents, analyzing risk categories, and examining the entities and circumstances associated with AI incidents.
+**AIID Incident Intelligence** is an AI-powered incident analysis and investigation platform developed using the AI Incident Database (AIID).
 
-The current implementation covers dataset inspection, data cleaning, transformation, feature engineering, exploratory data analysis, validation, and exporting analysis results.
+The platform combines Machine Learning, Natural Language Processing (NLP), similarity analysis, and Retrieval-Augmented Generation (RAG) to analyze historical AI incidents, classify potential risk domains, identify similar incidents, and generate investigation reports.
 
-2. Dataset Description
+It provides an interactive interface for exploring AI incidents, understanding risk patterns, and supporting structured incident investigation through historical evidence and AI-generated recommendations.
 
-Dataset: AI Incident Database (AIID) Excel Export
-Source file: AIID_Excel_Export-20261019.xlsx
-Main sheet: Incidents
-Original dataset size: 1,749 rows and 59 columns
+## 2. Problem Statement
 
-The dataset includes information such as:
+The increasing adoption of Artificial Intelligence across industries has introduced various risks, including misinformation, privacy violations, discrimination, security vulnerabilities, and system failures.
 
-Incident ID, date, year, title, and description
+Analyzing these incidents manually can be time-consuming and makes it difficult to identify recurring patterns and relationships between incidents.
 
-Developer and deployer information
+This project addresses these challenges by developing an intelligent platform that:
 
-Risk domains and risk subdomains
+- Analyzes historical AI incident records.
+- Identifies and classifies incident risk domains.
+- Finds similar historical incidents.
+- Retrieves relevant incident information.
+- Generates structured investigation reports using RAG.
+- Presents insights through an interactive dashboard.
 
-Responsible entities and intent
+## 3. Project Objectives
 
-Timing of incidents
+- Perform comprehensive Exploratory Data Analysis (EDA) on AIID records.
+- Clean and preprocess incident data.
+- Transform categorical variables and engineer relevant features.
+- Develop a Machine Learning model for risk domain classification.
+- Implement similarity-based incident retrieval.
+- Integrate FAISS-based retrieval with a Llama-powered RAG pipeline.
+- Develop an interactive frontend and backend architecture.
+- Generate investigation reports using historical incident evidence.
 
-AI technology and technical failure classifications
+## 4. Dataset Description
 
-Harm classifications and reported injuries or fatalities
+**Dataset:** AI Incident Database (AIID)
 
-Deployment sectors and geographical information
+**Original file:** `AIID_Excel_Export-20261019.xlsx`
 
-Number of associated reports
+| Dataset Information | Details |
+|---|---|
+| Total records | 1,749 |
+| Original columns | 59 |
+| Data source | AI Incident Database |
+| Duplicate Incident IDs | 0 |
+| Essential fields | Incident ID, Date, Year, Title, Description |
 
-The original Excel workbook also contains Reports, Entities, Data Dictionary, and Coverage Map sheets.
+The dataset contains historical AI incident information, including incident descriptions, risk domains, subdomains, responsible entities, deployment sectors, and other incident-related attributes.
 
-3. Data Cleaning
+Some taxonomy and descriptive fields contain missing values, which were examined during the data cleaning and validation stages.
 
-The initial data-cleaning process was implemented in:
+## 5. Data Processing Workflow
 
-notebooks/04_data_cleaning.py
+The project follows a structured data processing pipeline.
 
-The following operations were performed:
+### 5.1 Data Inspection and EDA
 
-Loaded the Incidents worksheet from the original Excel workbook.
+- Inspected dataset dimensions, column names, and data types.
+- Examined missing values and duplicate records.
+- Analyzed categorical and numerical attributes.
+- Examined relationships between incident attributes.
+- Validated dataset structure and taxonomy fields.
 
-Removed completely empty rows and columns.
+### 5.2 Data Cleaning
 
-Cleaned column names by removing unnecessary surrounding whitespace.
+- Checked and validated Incident IDs.
+- Removed duplicate records where applicable.
+- Converted date fields into appropriate formats.
+- Validated essential columns.
+- Examined missing values in risk taxonomy fields.
+- Preserved useful incident records rather than unnecessarily removing incomplete rows.
 
-Checked for duplicate incident IDs.
+### 5.3 Data Transformation
 
-Converted the incident date column to a datetime format.
+- Converted categorical variables into suitable representations.
+- Analyzed risk domain and risk subdomain distributions.
+- Performed feature engineering.
+- Prepared structured datasets for classification and analysis.
+- Validated the transformed datasets.
 
-Validated essential columns, including Incident ID, date, year, title, and description.
+### 5.4 Data Analysis
 
-Inspected missing values in important taxonomy and classification columns.
+Performed analysis of:
 
-Exported the cleaned dataset to CSV format.
+- Risk domain distribution.
+- Risk subdomain distribution.
+- AI harm level distribution.
+- Incident trends over time.
+- Geographic distribution of incidents.
+- Responsible entities.
+- Incident intent and timing.
 
-Cleaning Results
+Generated analysis results and visualizations using Python data analysis libraries.
 
-Original dataset: 1,749 rows and 59 columns.
+## 6. Machine Learning – Risk Domain Classification
 
-Cleaned dataset: 1,749 rows and 59 columns.
+A supervised Machine Learning pipeline was developed to classify AI incidents into risk domains.
 
-Duplicate incident IDs: 0.
+### Workflow
 
-Missing values in essential fields: 0.
+1. Prepared the classification dataset.
+2. Identified the target variable.
+3. Performed training and testing data splitting.
+4. Applied TF-IDF vectorization to incident text.
+5. Trained a classification model.
+6. Evaluated model performance.
+7. Saved the trained classifier and vectorizer.
+8. Integrated the trained model into the application.
 
-Missing values in classification fields were retained for further analysis rather than arbitrarily imputed.
+### Model Performance
 
-Output file: data/processed/incidents_cleaned.csv
+| Metric | Result |
+|---|---:|
+| Model Accuracy | 72.67% |
+| Classification Coverage | 85.53% |
+| Classified Incidents | 1,496 |
+| Total Incidents | 1,749 |
+| Risk Domains | 7 |
 
-4. Data Transformation
+The evaluation also includes classification reports, confusion matrices, and class-wise performance visualizations.
 
-Data transformation was implemented through the project scripts in the notebooks directory.
+**Note:** Classification coverage and model accuracy represent different measurements. Coverage indicates the proportion of incidents classified, while accuracy measures predictive correctness on the evaluated test data.
 
-Date Transformation
+## 7. Similarity-Based Incident Analysis
 
-The incident date was converted into a datetime representation.
+The platform includes a similarity analysis component to identify historical incidents that are relevant to a given incident description.
 
-The following features were created:
-
-Incident_Date_Year
-
-Incident_Date_Month
-
-Incident_Date_Month_Name
-
-Incident_Date_Quarter
-
-Incident_Date_Day
-
-Incident_Date_Day_Name
-
-These features support time-based analysis of reported AI incidents.
-
-Categorical and List-Like Data Transformation
-
-List-like fields were inspected and safely parsed using Python's ast.literal_eval where appropriate.
-
-Parsed fields include:
-
-Sector of Deployment
-
-Infrastructure Sectors
-
-AI Goal
-
-AI Technology
-
-AI Technology (Potential)
-
-Technical Failure
-
-Technical Failure (Potential)
-
-AI Task
-
-AI Methods
-
-Data Inputs
-
-New columns with the _List suffix were created for the applicable fields.
-
-The transformed dataset was saved to:
-
-data/processed/incidents_transformed.csv
-
-5. Feature Engineering
-
-Feature engineering was implemented in:
-
-notebooks/08_feature_engineering.py
-
-The following features were created:
-
-Feature
-
-Purpose
-
-Has_Reports
-
-Indicates whether an incident has associated reports.
-
-Has_Developer
-
-Indicates whether developer information is available.
-
-Has_Deployer
-
-Indicates whether deployer information is available.
-
-Has_Harm_Information
-
-Indicates whether the incident contains information in the selected harm-related fields.
-
-Incident_Age_Group
-
-Groups incidents into historical periods.
-
-The incident age groups are:
-
-Before 2011
-
-2011–2015
-
-2016–2020
-
-2021–2023
-
-2024 onwards
-
-The feature-engineered dataset contains 1,749 rows and 81 columns.
-
-Output file: data/processed/incidents_feature_engineered.csv
-
-6. Exploratory Data Analysis
-
-Exploratory data analysis was implemented in:
-
-notebooks/10_data_analysis.py
-
-The analysis examined incident trends, risk classifications, intent, timing, responsible entities, developers, harm levels, and geographical distributions.
-
-Visualizations and Analyses
-
-The following analyses were performed:
-
-Yearly incident trends
-
-Risk domain distribution
-
-Top 10 risk subdomains
-
-Monthly incident distribution
-
-Responsible entity distribution
-
-Intent distribution
-
-Incident timing distribution
-
-Top 10 developers
-
-AI harm level distribution
-
-Location region distribution
-
-These analyses help identify patterns in the available incident records and provide an overview of the types of risks documented in the database.
-
-7. Validation and Exported Results
-
-Data Validation
-
-The project includes validation scripts to check the integrity of the cleaned and transformed datasets.
-
-Validation checks include:
-
-Duplicate rows and incident IDs
-
-Missing values in essential columns
-
-Date and year consistency
-
-Presence of newly engineered features
-
-Missing and invalid report counts
-
-Consistency of analysis results
-
-The analysis validation script independently verified the principal incident counts and distributions.
-
-Exported Analysis Results
-
-The analysis results were exported using:
-
-notebooks/12_export_analysis_results.py
-
-The exported files were then checked using:
-
-notebooks/13_verify_analysis_exports.py
-
-All 10 out of 10 analysis CSV files were successfully verified as present and readable.
-
-The exported files are stored in results/analysis/.
-
-File
-
-Contents
-
-yearly_incident_trends.csv
-
-Incident counts by year
-
-risk_domain_distribution.csv
-
-Incident counts by risk domain
-
-risk_subdomain_distribution.csv
-
-Incident counts by risk subdomain
-
-monthly_incident_distribution.csv
-
-Incident counts by calendar month
-
-responsible_entity_distribution.csv
-
-Distribution of responsible entities
-
-intent_distribution.csv
-
-Distribution of incident intent
-
-timing_distribution.csv
-
-Distribution of incident timing
-
-top_10_developers.csv
-
-Ten most frequent developer entries
-
-ai_harm_level_distribution.csv
-
-Distribution of recorded AI harm levels
-
-location_region_distribution.csv
-
-Distribution of recorded geographical regions
-
-8. Key Findings
-
-The analysis of the 1,749 incident records identified the following patterns:
-
-Recorded incident trends: The database contains 460 incidents dated 2025, the highest annual count in the dataset. The 2026 count is 267 through October 7, 2026, so it represents a partial year.
-
-Risk domains: Malicious Actors & Misuse is the most frequent classified risk domain, with 566 records.
-
-Risk subdomains: Fraud, scams, and targeted manipulation is the most frequent recorded risk subdomain, with 412 records.
-
-Responsible entities: AI is recorded as the responsible entity in 960 incidents, while Human is recorded in 525.
-
-Intent: The dataset contains 740 incidents classified as unintentional and 735 classified as intentional.
-
-Timing: Post-deployment incidents account for 1,460 records.
-
-Missing classifications: Risk Domain is missing in 253 records, while AI Harm Level and Location Region are each missing in 1,549 records.
-
-Interpretation and Limitations
-
-These findings describe incidents recorded in the AI Incident Database; they do not represent the true worldwide frequency of AI incidents.
-
-The number of recorded incidents may be influenced by reporting practices, database coverage, and the availability of classification information. In particular, harm-level and geographical analyses cover only the subset with available classifications.
-
-The yearly counts for 2026 are incomplete and should not be directly compared with full-year counts without accounting for the partial reporting period.
-
-9. Tools and Technologies Used
-
-Programming language: Python
-
-Data manipulation: Pandas, NumPy
-
-Data visualization: Matplotlib, Seaborn
-
-Excel processing: OpenPyXL
-
-Data formats: Excel and CSV
-
-Development environment: Visual Studio Code
-
-Environment management: Python virtual environment (.venv)
-
-10. Current Project Status
-
-The following stages have been completed:
-
-Dataset inspection and quality assessment
-
-Data cleaning
-
-Date and categorical data transformation
-
-Feature engineering
-
-Exploratory data analysis and visualization
-
-Data and analysis validation
-
-Exporting and verifying analysis results
-
-The current version establishes a validated data-analysis foundation for the project.
-
-Advanced capabilities, such as machine-learning-based anomaly detection, incident classification, retrieval-augmented generation (RAG), and AI-assisted incident investigation, are not yet documented as completed and can be developed as future project stages.
+### Workflow
+
+- Loads historical incident records.
+- Converts incident descriptions into numerical text representations.
+- Builds a similarity index.
+- Compares the submitted incident with historical incidents.
+- Retrieves the most similar incident records.
+- Displays relevant historical information for further investigation.
+
+This functionality helps investigators understand recurring incident patterns and identify related historical cases.
+
+## 8. Retrieval-Augmented Generation (RAG)
+
+The project integrates a RAG pipeline to support evidence-based incident investigation.
+
+### RAG Workflow
+
+1. Accepts incident information for investigation.
+2. Converts the incident query into a retrieval representation.
+3. Searches the FAISS vector index.
+4. Retrieves relevant historical incident information.
+5. Supplies retrieved context to the Llama-based generation component.
+6. Generates a structured investigation report.
+
+### Key Components
+
+- **FAISS:** Efficient similarity-based vector retrieval.
+- **Llama:** Language model used for report generation.
+- **Incident Metadata:** Stores supporting historical incident information.
+- **RAG Pipeline:** Connects retrieval and generation components.
+
+The purpose of RAG is to provide investigation recommendations using retrieved historical incident context rather than relying only on a language model's general knowledge.
+
+## 9. Application Architecture
+
+The project includes a React frontend and FastAPI backend, along with a Streamlit application.
+
+### Frontend – React + Vite
+
+The frontend provides an interactive interface with the following modules:
+
+- **Dashboard:** Displays incident statistics and key performance indicators.
+- **Historical Incidents:** Allows users to explore, search, and filter historical incidents.
+- **Similarity Analysis:** Identifies similar historical incidents.
+- **Investigation:** Supports AI incident investigation.
+- **Investigation Reports:** Displays saved investigation reports and supports PDF export.
+- **About:** Provides project information.
+
+### Backend – FastAPI
+
+The backend provides API endpoints for:
+
+- Dashboard statistics.
+- Historical incident retrieval.
+- Incident search and filtering.
+- Incident investigation.
+- Similarity analysis.
+- RAG report generation.
+- Investigation report history.
+
+### Streamlit Application
+
+The root-level `app.py` provides an additional Streamlit-based interface for incident exploration, risk classification, and analysis.
+
+## 10. Technology Stack
+
+| Category | Technologies |
+|---|---|
+| Programming Language | Python, JavaScript |
+| Data Processing | Pandas, NumPy |
+| Data Visualization | Matplotlib, Seaborn, Plotly |
+| Machine Learning | Scikit-learn |
+| NLP | TF-IDF |
+| Classification | Supervised Machine Learning |
+| Similarity Search | Text Vectorization, Similarity Analysis |
+| Vector Database / Retrieval | FAISS |
+| Generative AI | Llama |
+| RAG | Retrieval-Augmented Generation |
+| Frontend | React, Vite, Tailwind CSS |
+| Backend | FastAPI |
+| Additional UI | Streamlit |
+| PDF Generation | jsPDF |
+| Development Tools | VS Code, Jupyter Notebook, Git, GitHub |
+
+## 11. Project Directory Structure
+
+```text
+AIID-Incident-Intelligence/
+│
+├── backend/
+│   └── main.py
+│
+├── data/
+│   ├── raw/
+│   └── processed/
+│
+├── frontend/
+│   ├── public/
+│   └── src/
+│       ├── components/
+│       ├── pages/
+│       └── services/
+│
+├── models/
+│   ├── classification/
+│   ├── rag/
+│   └── tfidf/
+│
+├── notebooks/
+│
+├── rag/
+│   └── rag_pipeline.py
+│
+├── results/
+│   ├── analysis/
+│   └── figures/
+│
+├── app.py
+├── similar_incidents.py
+├── PROJECT_SUMMARY.md
+└── .gitignore
+```
+
+## 12. Key Features
+
+- AI incident dataset exploration and analysis.
+- Interactive incident dashboard.
+- Machine Learning-based risk domain classification.
+- Historical incident search and filtering.
+- Similarity-based incident identification.
+- FAISS-powered historical incident retrieval.
+- Llama-based RAG investigation reports.
+- Investigation report history.
+- PDF report export.
+- Separate React frontend and FastAPI backend.
+- Streamlit-based application interface.
+
+## 13. Project Outcomes
+
+The project demonstrates the integration of multiple AI technologies into a unified incident intelligence platform.
+
+Key outcomes include:
+
+- Processed and analyzed 1,749 AI incident records.
+- Developed a seven-domain risk classification pipeline.
+- Achieved 72.67% reported model accuracy.
+- Implemented similarity-based historical incident retrieval.
+- Integrated FAISS and Llama into a RAG investigation workflow.
+- Developed interactive application interfaces.
+- Implemented investigation report storage and PDF export.
+
+## 14. Future Enhancements
+
+- Improve classification performance through advanced NLP models and hyperparameter optimization.
+- Integrate additional AI incident datasets.
+- Improve retrieval relevance and evaluation.
+- Introduce explainable AI for classification decisions.
+- Add real-time AI incident monitoring.
+- Implement user authentication and role-based access.
+- Deploy the platform to a cloud environment.
+- Introduce automated risk alerts and incident trend monitoring.
+
+## 15. Conclusion
+
+AIID Incident Intelligence demonstrates how Machine Learning, NLP, similarity search, and Generative AI can be integrated to support AI incident analysis and investigation.
+
+By combining historical incident exploration, automated risk classification, similarity-based retrieval, and RAG-generated investigation reports, the platform provides a structured approach to understanding AI-related risks.
+
+The project highlights the practical application of AI technologies in improving incident intelligence, supporting evidence-based investigations, and promoting responsible AI development and deployment.
+
+---
+
+**Project:** AIID Incident Intelligence  
+**Domain:** Artificial Intelligence | Machine Learning | NLP | Generative AI  
+**Repository:** https://github.com/Dhanush3414/AIID-Incident-Intelligence
