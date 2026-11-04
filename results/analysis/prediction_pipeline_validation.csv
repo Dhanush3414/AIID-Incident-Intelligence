@@ -1,0 +1,6 @@
+Test_ID,Title,Predicted_Risk_Domain,Confidence_Percent,Valid_Prediction
+1,AI chatbot spreads false information,Misinformation,39.58,True
+2,AI system discriminates against applicants,"AI system safety, failures, and limitations",23.09,True
+3,AI voice cloning used for financial fraud,Malicious Actors & Misuse,48.15,True
+4,Facial recognition produces incorrect matches,Privacy & Security,31.77,True
+5,AI system exposes private user information,Privacy & Security,41.97,True
